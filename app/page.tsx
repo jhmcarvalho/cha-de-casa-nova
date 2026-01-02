@@ -84,8 +84,7 @@ export default function Home() {
   }
 
   const handleConfirmPurchase = async () => {
-    if (!selectedItem || !nomeComprador.trim()) {
-      alert('Por favor, informe o seu nome')
+    if (!selectedItem) {
       return
     }
 
@@ -94,7 +93,7 @@ export default function Home() {
         .from('itens')
         .update({
           comprado: true,
-          nome_comprador: nomeComprador.trim(),
+          nome_comprador: nomeComprador.trim() || null,
           tipo_pagamento: tipoPagamento,
           updated_at: new Date().toISOString(),
         })
@@ -228,7 +227,9 @@ export default function Home() {
                   
                   {item.comprado ? (
                     <div className="mt-2 flex items-center gap-2 text-sm text-slate-500">
-                      <span className="font-medium">Item comprado!</span>
+                      <span className="font-medium">
+                        Item comprado!
+                      </span>
                       <span className="text-slate-400">•</span>
                       <span className="text-xs">
                         {item.tipo_pagamento === 'pix' ? '💰PIX' : '📦Item físico'}
@@ -277,14 +278,14 @@ export default function Home() {
 
                 <div className="mb-4">
                   <label className="block text-slate-700 font-semibold mb-2 text-sm">
-                    Seu nome <span className="text-red-500">*</span>
+                    Nome do comprador (opcional)
                   </label>
                   <input
                     type="text"
                     value={nomeComprador}
                     onChange={(e) => setNomeComprador(e.target.value)}
                     className="w-full px-3 py-2 border-2 border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all outline-none text-slate-800 font-medium text-sm"
-                    placeholder="Digite seu nome"
+                    placeholder="Seu nome"
                   />
                 </div>
 

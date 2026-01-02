@@ -25,3 +25,4 @@ E atualizar o código em `app/page.tsx` na linha onde está `/hedwigs-theme.mp3`
 Certifique-se de ter os direitos para usar a música ou use uma versão royalty-free/criative commons.
 
 
+
