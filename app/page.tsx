@@ -3,6 +3,14 @@
 import { useEffect, useState, useRef } from 'react'
 import { supabase, Item } from '@/lib/supabase'
 
+type ToastType = 'success' | 'error'
+
+interface Toast {
+  id: string
+  message: string
+  type: ToastType
+}
+
 export default function Home() {
   const [items, setItems] = useState<Item[]>([])
   const [loading, setLoading] = useState(true)
@@ -11,6 +19,7 @@ export default function Home() {
   const [tipoPagamento, setTipoPagamento] = useState<'fisico' | 'pix'>('fisico')
   const [showModal, setShowModal] = useState(false)
   const [isPlaying, setIsPlaying] = useState(false)
+  const [toasts, setToasts] = useState<Toast[]>([])
   const audioRef = useRef<HTMLAudioElement | null>(null)
 
   useEffect(() => {
@@ -105,9 +114,10 @@ export default function Home() {
       setShowModal(false)
       setSelectedItem(null)
       setNomeComprador('')
+      showToast('Compra confirmada com sucesso! ✨', 'success')
     } catch (error) {
       console.error('Erro ao atualizar item:', error)
-      alert('Erro ao processar a compra. Tente novamente.')
+      showToast('Erro ao processar a compra. Tente novamente.', 'error')
     }
   }
 
@@ -120,13 +130,28 @@ export default function Home() {
 
   const chavePix = process.env.NEXT_PUBLIC_CHAVE_PIX || ''
 
+  const showToast = (message: string, type: ToastType = 'success') => {
+    const id = Math.random().toString(36).substr(2, 9)
+    const newToast: Toast = { id, message, type }
+    setToasts((prev) => [...prev, newToast])
+
+    // Remove o toast automaticamente após 4 segundos
+    setTimeout(() => {
+      setToasts((prev) => prev.filter((toast) => toast.id !== id))
+    }, 4000)
+  }
+
+  const removeToast = (id: string) => {
+    setToasts((prev) => prev.filter((toast) => toast.id !== id))
+  }
+
   const copyToClipboard = async (text: string) => {
     try {
       await navigator.clipboard.writeText(text)
-      alert('Chave PIX copiada para a área de transferência!')
+      showToast('Chave PIX copiada para a área de transferência!', 'success')
     } catch (err) {
       console.error('Erro ao copiar:', err)
-      alert('Erro ao copiar. Por favor, copie manualmente.')
+      showToast('Erro ao copiar. Por favor, copie manualmente.', 'error')
     }
   }
 
@@ -153,6 +178,59 @@ export default function Home() {
       {/* Overlay escuro para legibilidade */}
       <div className="absolute inset-0 bg-gradient-to-b from-slate-900/85 via-slate-800/80 to-slate-900/85"></div>
       
+      {/* Toast Notifications */}
+      <div className="fixed top-4 right-4 z-[60] flex flex-col gap-2 max-w-sm w-full pointer-events-none px-4">
+        {toasts.map((toast, index) => (
+          <div
+            key={toast.id}
+            className={`
+              pointer-events-auto
+              bg-white/95 backdrop-blur-md
+              rounded-xl shadow-2xl
+              border-l-4
+              p-4
+              flex items-start justify-between gap-3
+              transform transition-all duration-300 ease-out
+              ${toast.type === 'success' 
+                ? 'border-green-500 bg-gradient-to-r from-white/95 to-green-50/50' 
+                : 'border-red-500 bg-gradient-to-r from-white/95 to-red-50/50'
+              }
+            `}
+            style={{
+              animation: `slideInRight 0.3s ease-out ${index * 0.05}s both`
+            }}
+          >
+            <div className="flex items-start gap-3 flex-1 min-w-0">
+              {toast.type === 'success' ? (
+                <div className="flex-shrink-0 w-6 h-6 rounded-full bg-green-100 flex items-center justify-center mt-0.5">
+                  <svg className="w-4 h-4 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+                  </svg>
+                </div>
+              ) : (
+                <div className="flex-shrink-0 w-6 h-6 rounded-full bg-red-100 flex items-center justify-center mt-0.5">
+                  <svg className="w-4 h-4 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </div>
+              )}
+              <p className="text-sm font-semibold flex-1 text-slate-800">
+                {toast.message}
+              </p>
+            </div>
+            <button
+              onClick={() => removeToast(toast.id)}
+              className="flex-shrink-0 w-6 h-6 rounded-full hover:bg-slate-200/50 flex items-center justify-center transition-colors group"
+              aria-label="Fechar"
+            >
+              <svg className="w-4 h-4 text-slate-500 group-hover:text-slate-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+          </div>
+        ))}
+      </div>
+
       {/* Controle de áudio */}
       <button
         onClick={toggleAudio}
