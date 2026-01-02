@@ -198,21 +198,21 @@ export default function Home() {
         </p>
       </div>
 
-      <div className="grid md:grid-cols-2 gap-6 max-w-2xl mx-auto">
+      <div className="grid md:grid-cols-2 gap-4 max-w-2xl mx-auto">
         {/* Opção 1: Lista de Itens */}
         <button
           onClick={() => setView('lista')}
-          className="group relative bg-white/95 backdrop-blur-md rounded-2xl border-4 border-amber-400 hover:border-amber-300 transition-all duration-300 ease-out shadow-2xl hover:shadow-amber-500/30 cursor-pointer hover:-translate-y-2 p-8 text-left"
+          className="group relative bg-white/95 backdrop-blur-md rounded-xl border-2 border-amber-400 hover:border-amber-300 transition-all duration-300 ease-out shadow-xl hover:shadow-amber-500/30 cursor-pointer hover:-translate-y-1 p-5 md:p-6 text-left"
         >
           <div className="flex flex-col items-center text-center">
-            <div className="text-5xl mb-4">📦</div>
-            <h2 className="text-2xl font-bold text-slate-900 mb-2 group-hover:text-amber-600 transition-colors">
+            <div className="text-4xl mb-3">📦</div>
+            <h2 className="text-xl md:text-2xl font-bold text-slate-900 mb-1.5 group-hover:text-amber-600 transition-colors">
               Lista de Itens
             </h2>
-            <p className="text-slate-600 font-medium">
+            <p className="text-sm md:text-base text-slate-600 font-medium">
               Escolha um item da lista de presentes
             </p>
-            <div className="mt-4 w-12 h-1 bg-gradient-to-r from-amber-400 to-yellow-300"></div>
+            <div className="mt-3 w-10 h-0.5 bg-gradient-to-r from-amber-400 to-yellow-300"></div>
           </div>
         </button>
 
@@ -222,17 +222,17 @@ export default function Home() {
             setView('pix')
             setChavePixSelecionada(chavePix)
           }}
-          className="group relative bg-white/95 backdrop-blur-md rounded-2xl border-4 border-amber-400 hover:border-amber-300 transition-all duration-300 ease-out shadow-2xl hover:shadow-amber-500/30 cursor-pointer hover:-translate-y-2 p-8 text-left"
+          className="group relative bg-white/95 backdrop-blur-md rounded-xl border-2 border-amber-400 hover:border-amber-300 transition-all duration-300 ease-out shadow-xl hover:shadow-amber-500/30 cursor-pointer hover:-translate-y-1 p-5 md:p-6 text-left"
         >
           <div className="flex flex-col items-center text-center">
-            <div className="text-5xl mb-4">💰</div>
-            <h2 className="text-2xl font-bold text-slate-900 mb-2 group-hover:text-amber-600 transition-colors">
+            <div className="text-4xl mb-3">💰</div>
+            <h2 className="text-xl md:text-2xl font-bold text-slate-900 mb-1.5 group-hover:text-amber-600 transition-colors">
               Fazer PIX
             </h2>
-            <p className="text-slate-600 font-medium">
+            <p className="text-sm md:text-base text-slate-600 font-medium">
               Envie um presente em dinheiro do valor que desejar
             </p>
-            <div className="mt-4 w-12 h-1 bg-gradient-to-r from-amber-400 to-yellow-300"></div>
+            <div className="mt-3 w-10 h-0.5 bg-gradient-to-r from-amber-400 to-yellow-300"></div>
           </div>
         </button>
       </div>
@@ -299,15 +299,11 @@ export default function Home() {
                   )}
                 </div>
                 
-                {item.comprado ? (
+                {item.comprado && (
                   <div className="mt-2 flex items-center gap-2 text-sm text-slate-500">
                     <span className="font-medium">
                       Item comprado!
                     </span>
-                  </div>
-                ) : (
-                  <div className="text-sm text-slate-500 font-medium">
-                    {/*formatCurrency(item.valor)*/}
                   </div>
                 )}
               </div>
