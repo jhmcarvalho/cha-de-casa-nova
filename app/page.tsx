@@ -375,7 +375,7 @@ export default function Home() {
                   {selectedItem.nome}
                 </p>
                 <p className="text-base text-slate-600 font-medium">
-                  {formatCurrency(selectedItem.valor)}
+                  {/*formatCurrency(selectedItem.valor)*/}
                 </p>
               </div>
 
