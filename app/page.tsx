@@ -25,6 +25,7 @@ export default function Home() {
   const [valorPix, setValorPix] = useState('')
   const [chavePixSelecionada, setChavePixSelecionada] = useState('')
   const audioRef = useRef<HTMLAudioElement | null>(null)
+  const isNavigatingRef = useRef(false)
 
   const chavePix = process.env.NEXT_PUBLIC_CHAVE_PIX || ''
 
@@ -58,6 +59,42 @@ export default function Home() {
       }
     }
   }, [])
+
+  // Gerenciar history quando view muda
+  useEffect(() => {
+    if (typeof window === 'undefined') return
+    if (isNavigatingRef.current) {
+      isNavigatingRef.current = false
+      return
+    }
+
+    // Se mudou para uma tela secundária, adicionar estado no history
+    // Isso permite que o botão voltar funcione corretamente
+    if (view !== 'home') {
+      window.history.pushState({ view }, '', window.location.href)
+    }
+  }, [view])
+
+  // Interceptar botão voltar do navegador
+  useEffect(() => {
+    if (typeof window === 'undefined') return
+
+    const handlePopState = () => {
+      // Se estiver em uma tela secundária, voltar para home
+      if (view !== 'home') {
+        isNavigatingRef.current = true
+        setView('home')
+      }
+      // Se estiver em home, permitir comportamento padrão (sair do site)
+    }
+
+    // Adicionar listener para o evento popstate
+    window.addEventListener('popstate', handlePopState)
+
+    return () => {
+      window.removeEventListener('popstate', handlePopState)
+    }
+  }, [view])
 
   const toggleAudio = () => {
     if (audioRef.current) {
