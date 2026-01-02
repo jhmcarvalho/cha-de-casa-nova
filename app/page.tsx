@@ -228,10 +228,10 @@ export default function Home() {
                   
                   {item.comprado ? (
                     <div className="mt-2 flex items-center gap-2 text-sm text-slate-500">
-                      <span className="font-medium">Comprado por {item.nome_comprador}</span>
-                      <span className="text-slate-300">•</span>
+                      <span className="font-medium">Item comprado!</span>
+                      <span className="text-slate-400">•</span>
                       <span className="text-xs">
-                        {item.tipo_pagamento === 'pix' ? '💰 PIX' : '📦 Item físico'}
+                        {item.tipo_pagamento === 'pix' ? '💰PIX' : '📦Item físico'}
                       </span>
                     </div>
                   ) : (
@@ -255,123 +255,127 @@ export default function Home() {
 
         {showModal && selectedItem && (
           <div className="fixed inset-0 bg-black/70 backdrop-blur-md flex items-center justify-center z-50 p-4">
-            <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full p-8 border-2 border-amber-200">
-              <div className="text-center mb-6">
-                <div className="text-4xl mb-2">✨</div>
-                <h2 className="text-3xl font-bold text-slate-900 mb-2">
-                  Confirmar Compra
-                </h2>
-                <div className="w-16 h-1 bg-gradient-to-r from-amber-400 to-yellow-300 mx-auto"></div>
-              </div>
-              
-              <div className="mb-6 p-5 bg-gradient-to-br from-amber-50 to-yellow-50 rounded-xl border-2 border-amber-200">
-                <p className="text-2xl font-bold text-slate-900 mb-2">
-                  {selectedItem.nome}
-                </p>
-                <p className="text-lg text-slate-600 font-medium">
-                  {formatCurrency(selectedItem.valor)}
-                </p>
-              </div>
-
-              <div className="mb-6">
-                <label className="block text-slate-700 font-semibold mb-3">
-                  Seu nome <span className="text-red-500">*</span>
-                </label>
-                <input
-                  type="text"
-                  value={nomeComprador}
-                  onChange={(e) => setNomeComprador(e.target.value)}
-                  className="w-full px-4 py-3 border-2 border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all outline-none text-slate-800 font-medium"
-                  placeholder="Digite seu nome"
-                />
-              </div>
-
-              <div className="mb-6">
-                <label className="block text-slate-700 font-semibold mb-3">
-                  Como deseja presentear?
-                </label>
-                <div className="space-y-3">
-                  <label className={`
-                    flex items-center p-4 border-2 rounded-xl cursor-pointer transition-all
-                    ${tipoPagamento === 'fisico' 
-                      ? 'border-blue-600 bg-blue-50 shadow-sm' 
-                      : 'border-slate-200 hover:border-blue-400 hover:bg-slate-50'
-                    }
-                  `}>
-                    <input
-                      type="radio"
-                      value="fisico"
-                      checked={tipoPagamento === 'fisico'}
-                      onChange={(e) => setTipoPagamento(e.target.value as 'fisico')}
-                      className="mr-4 w-5 h-5 text-blue-600 focus:ring-blue-500"
-                    />
-                    <span className="text-slate-700 font-medium">📦 Vou comprar o item físico</span>
-                  </label>
-                  <label className={`
-                    flex items-center p-4 border-2 rounded-xl cursor-pointer transition-all
-                    ${tipoPagamento === 'pix' 
-                      ? 'border-blue-600 bg-blue-50 shadow-sm' 
-                      : 'border-slate-200 hover:border-blue-400 hover:bg-slate-50'
-                    }
-                  `}>
-                    <input
-                      type="radio"
-                      value="pix"
-                      checked={tipoPagamento === 'pix'}
-                      onChange={(e) => setTipoPagamento(e.target.value as 'pix')}
-                      className="mr-4 w-5 h-5 text-blue-600 focus:ring-blue-500"
-                    />
-                    <span className="text-slate-700 font-medium">
-                      💰 Vou fazer PIX de {formatCurrency(selectedItem.valor)}
-                    </span>
-                  </label>
+            <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full max-h-[90vh] flex flex-col border-2 border-amber-200">
+              {/* Conteúdo com scroll */}
+              <div className="overflow-y-auto flex-1 p-6">
+                <div className="text-center mb-4">
+                  <div className="text-3xl mb-1">✨</div>
+                  <h2 className="text-2xl font-bold text-slate-900 mb-1">
+                    Confirmar Compra
+                  </h2>
+                  <div className="w-12 h-0.5 bg-gradient-to-r from-amber-400 to-yellow-300 mx-auto"></div>
                 </div>
-              </div>
-
-              {tipoPagamento === 'pix' && (
-                <div className="mb-6 p-5 bg-blue-50 border-2 border-blue-200 rounded-xl">
-                  <p className="text-sm text-slate-700 font-bold mb-3 flex items-center gap-2">
-                    <span className="text-lg">💰</span> Chave PIX (Celular)
+                
+                <div className="mb-4 p-3 bg-gradient-to-br from-amber-50 to-yellow-50 rounded-lg border border-amber-200">
+                  <p className="text-lg font-bold text-slate-900 mb-1">
+                    {selectedItem.nome}
                   </p>
-                  {chavePix ? (
-                    <div className="space-y-3">
-                      <div className="flex items-center gap-2">
-                        <code className="flex-1 px-4 py-3 bg-white border-2 border-blue-300 rounded-xl text-sm text-slate-800 break-all font-mono shadow-sm">
-                          {chavePix}
-                        </code>
-                        <button
-                          onClick={() => copyToClipboard(chavePix)}
-                          className="px-4 py-3 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition-all shadow-md hover:shadow-lg font-semibold whitespace-nowrap"
-                        >
-                          Copiar
-                        </button>
-                      </div>
-                      <p className="text-xs text-slate-600 font-medium">
-                        💡 Valor a transferir: <span className="font-bold">{formatCurrency(selectedItem.valor)}</span>
-                      </p>
-                    </div>
-                  ) : (
-                    <p className="text-sm text-slate-600">
-                      Configure a variável NEXT_PUBLIC_CHAVE_PIX para exibir a chave PIX aqui.
-                    </p>
-                  )}
+                  <p className="text-base text-slate-600 font-medium">
+                    {formatCurrency(selectedItem.valor)}
+                  </p>
                 </div>
-              )}
 
-              <div className="flex gap-4 mt-8">
+                <div className="mb-4">
+                  <label className="block text-slate-700 font-semibold mb-2 text-sm">
+                    Seu nome <span className="text-red-500">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    value={nomeComprador}
+                    onChange={(e) => setNomeComprador(e.target.value)}
+                    className="w-full px-3 py-2 border-2 border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all outline-none text-slate-800 font-medium text-sm"
+                    placeholder="Digite seu nome"
+                  />
+                </div>
+
+                <div className="mb-4">
+                  <label className="block text-slate-700 font-semibold mb-2 text-sm">
+                    Como deseja presentear?
+                  </label>
+                  <div className="space-y-2">
+                    <label className={`
+                      flex items-center p-3 border-2 rounded-lg cursor-pointer transition-all text-sm
+                      ${tipoPagamento === 'fisico' 
+                        ? 'border-blue-600 bg-blue-50 shadow-sm' 
+                        : 'border-slate-200 hover:border-blue-400 hover:bg-slate-50'
+                      }
+                    `}>
+                      <input
+                        type="radio"
+                        value="fisico"
+                        checked={tipoPagamento === 'fisico'}
+                        onChange={(e) => setTipoPagamento(e.target.value as 'fisico')}
+                        className="mr-3 w-4 h-4 text-blue-600 focus:ring-blue-500"
+                      />
+                      <span className="text-slate-700 font-medium">📦 Vou comprar o item físico</span>
+                    </label>
+                    <label className={`
+                      flex items-center p-3 border-2 rounded-lg cursor-pointer transition-all text-sm
+                      ${tipoPagamento === 'pix' 
+                        ? 'border-blue-600 bg-blue-50 shadow-sm' 
+                        : 'border-slate-200 hover:border-blue-400 hover:bg-slate-50'
+                      }
+                    `}>
+                      <input
+                        type="radio"
+                        value="pix"
+                        checked={tipoPagamento === 'pix'}
+                        onChange={(e) => setTipoPagamento(e.target.value as 'pix')}
+                        className="mr-3 w-4 h-4 text-blue-600 focus:ring-blue-500"
+                      />
+                      <span className="text-slate-700 font-medium">
+                        💰 Vou fazer PIX de {formatCurrency(selectedItem.valor)}
+                      </span>
+                    </label>
+                  </div>
+                </div>
+
+                {tipoPagamento === 'pix' && (
+                  <div className="mb-4 p-3 bg-blue-50 border-2 border-blue-200 rounded-lg">
+                    <p className="text-xs text-slate-700 font-bold mb-2 flex items-center gap-1">
+                      <span>💰</span> Chave PIX (Celular)
+                    </p>
+                    {chavePix ? (
+                      <div className="space-y-2">
+                        <div className="flex items-center gap-2">
+                          <code className="flex-1 px-3 py-2 bg-white border-2 border-blue-300 rounded-lg text-xs text-slate-800 break-all font-mono shadow-sm">
+                            {chavePix}
+                          </code>
+                          <button
+                            onClick={() => copyToClipboard(chavePix)}
+                            className="px-3 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-all shadow-md hover:shadow-lg font-semibold text-xs whitespace-nowrap"
+                          >
+                            Copiar
+                          </button>
+                        </div>
+                        <p className="text-xs text-slate-600 font-medium">
+                          💡 Valor: <span className="font-bold">{formatCurrency(selectedItem.valor)}</span>
+                        </p>
+                      </div>
+                    ) : (
+                      <p className="text-xs text-slate-600">
+                        Configure a variável NEXT_PUBLIC_CHAVE_PIX para exibir a chave PIX aqui.
+                      </p>
+                    )}
+                  </div>
+                )}
+              </div>
+
+              {/* Botões fixos na parte inferior */}
+              <div className="flex gap-3 p-4 border-t border-slate-200 bg-white rounded-b-2xl">
                 <button
                   onClick={() => {
                     setShowModal(false)
                     setSelectedItem(null)
                     setNomeComprador('')
                   }}
-                  className="flex-1 px-6 py-3 border-2 border-slate-300 text-slate-700 rounded-xl hover:bg-slate-50 hover:border-slate-400 transition-all font-semibold"
+                  className="flex-1 px-4 py-2.5 border-2 border-slate-300 text-slate-700 rounded-lg hover:bg-slate-50 hover:border-slate-400 transition-all font-semibold text-sm"
                 >
                   Cancelar
                 </button>
                 <button
                   onClick={handleConfirmPurchase}
-                  className="flex-1 px-6 py-3 bg-gradient-to-r from-amber-500 to-yellow-500 text-white rounded-xl hover:from-amber-600 hover:to-yellow-600 transition-all shadow-lg hover:shadow-xl font-bold"
+                  className="flex-1 px-4 py-2.5 bg-gradient-to-r from-amber-500 to-yellow-500 text-white rounded-lg hover:from-amber-600 hover:to-yellow-600 transition-all shadow-lg hover:shadow-xl font-bold text-sm"
                 >
                   Confirmar ✨
                 </button>
