@@ -282,7 +282,7 @@ export default function Home() {
                   value={nomeComprador}
                   onChange={(e) => setNomeComprador(e.target.value)}
                   className="w-full px-4 py-3 border-2 border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all outline-none text-slate-800 font-medium"
-                  placeholder="Digite seu nome completo"
+                  placeholder="Digite seu nome"
                 />
               </div>
 
@@ -305,7 +305,7 @@ export default function Home() {
                       onChange={(e) => setTipoPagamento(e.target.value as 'fisico')}
                       className="mr-4 w-5 h-5 text-blue-600 focus:ring-blue-500"
                     />
-                    <span className="text-slate-700 font-medium">📦 Comprar o item físico</span>
+                    <span className="text-slate-700 font-medium">📦 Vou comprar o item físico</span>
                   </label>
                   <label className={`
                     flex items-center p-4 border-2 rounded-xl cursor-pointer transition-all
@@ -322,7 +322,7 @@ export default function Home() {
                       className="mr-4 w-5 h-5 text-blue-600 focus:ring-blue-500"
                     />
                     <span className="text-slate-700 font-medium">
-                      💰 Fazer PIX de {formatCurrency(selectedItem.valor)}
+                      💰 Vou fazer PIX de {formatCurrency(selectedItem.valor)}
                     </span>
                   </label>
                 </div>
@@ -331,7 +331,7 @@ export default function Home() {
               {tipoPagamento === 'pix' && (
                 <div className="mb-6 p-5 bg-blue-50 border-2 border-blue-200 rounded-xl">
                   <p className="text-sm text-slate-700 font-bold mb-3 flex items-center gap-2">
-                    <span className="text-lg">💰</span> Chave PIX
+                    <span className="text-lg">💰</span> Chave PIX (Celular)
                   </p>
                   {chavePix ? (
                     <div className="space-y-3">
